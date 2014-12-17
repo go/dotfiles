@@ -1,0 +1,175 @@
+# /etc/skel/.zshrc:
+
+# color
+local BLACK=$'%{\e[0;30m%}'
+local RED=$'%{\e[1;31m%}'
+local GREEN=$'%{\e[0;32m%}'
+local YELLOW=$'%{\e[0;33m%}'
+local BLUE=$'%{\e[0;34m%}'
+local PURPLE=$'%{\e[0;35m%}'
+local WATER=$'%{\e[0;36m%}'
+local LIGHT_GRAY=$'%{\e[0;37m%}'
+local GRAY=$'%{\e[5;37m%}'
+local WHITE=$'%{\e[1;37m%}'
+local WHITE_LINE=$'%{\e[00;04;37m%}'
+
+# prompt
+PROMPT=$LIGHT_GRAY'[${USER}@${HOSTNAME}] '$WHITE'%B%(!.#.$)%b '
+RPROMPT=$LIGHT_GRAY'[%~]'$WHITE'%U%*%u'$DEFAULT
+PROMPT_COMMAND="todo --global --global-database ~/TODO; todo"
+setopt PROMPT_SUBST
+
+# colors for ls, etc.
+alias rm="rm -f"
+alias decayscreen="decayscreen -root"
+
+HOSTNAME="go's MBA"
+export HOSTNAME
+
+#EDITOR=/usr/bin/vim
+EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
+export EDITOR
+
+alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+
+#TERM=vt100
+TERM=xterm-color
+export TERM
+
+PYTHONPATH=/home/go/work:/home/go/work/dist_pixels:/home/go/work/google_appengine:/home/go/work/google_appengine/lib/antlr3:/home/go/work/google_appengine/lib/django:/home/go/work/google_appengine/lib/webob:/home/go/work/google_appengine/lib/yaml/lib$PYTHONPATH
+export PYTHONPATH
+
+PATH=.:/Users/go/work/twittext\
+:/usr/games/bin\
+:/usr/bin\
+:/usr/sbin\
+:/usr/local/bin\
+:~/bin \
+# :/usr/local/google_appengine
+export PATH
+export PATH=/bin:$PATH
+export PATH=/sbin:$PATH
+export PATH=/usr/local/bin:$PATH
+#export PATH=/export/go/bin:$PATH
+export PATH=/export/go/work/firefox:$PATH
+export PATH=/home/go/work/gsutil:$PATH
+# CloudStack API tool
+export PATH=$HOME/work/cloudstack_api:$PATH
+
+MANPATH=/usr/share/man:/usr/dt/share/man:/usr/openwin/share/man:/opt/SUNWspro/man:/usr/local/man:/usr/local2/man:/usr/local2/java1.2/man:/usr/local2/TeX/man:/usr/local2/canna/man:/usr/local2/lib/perl5/man:/opt/NSUG97/man:/opt/NSUG/man
+export MANPATH
+
+GOROOT=/home/go/work/goroot
+GOOS=linux
+GOARCH=386
+export GOROOT
+export GOOS
+export GOARCH
+
+# for CloudStack
+CATALINA_HOME=/Users/go/work/apache-tomcat-6.0.33
+export CATALINA_HOME
+CATALINA_BASE=/Users/go/work/apache-tomcat-6.0.33
+export CATALINA_BASE
+JAVA_HOME=/Library/Java/Home
+#export JAVA_HOME
+#JAVA_OPTS="-Xms256m -Xmx512m"
+export JAVA_OPTS
+_JAVA_OPTIONS="-Dfile.encoding=UTF-8"
+export _JAVA_OPTIONS
+# CLASSPATH=/Users/go/work/apache-tomcat-6.0.33/bin/bootstrap.jar:/Users/go/work/apache-tomcat-6.0.33/lib
+CLASSPATH=/usr/local/Cellar/tomcat6/6.0.33/libexec/bin/bootstrap.jar
+export CLASSPATH
+export M2_HOME=/usr/share/java/maven-3.0.3
+export PATH=${M2_HOME}/bin:${PATH}
+export MAVEN_OPTS="-Xmx1024m -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"
+
+#SVN_SSH="ssh -l gchiba -i ~/.ssh/id_rsa" 
+#export SVN_SSH
+
+# Change the window title of X terminals 
+case $TERM in
+        xterm*|rxvt|Eterm|eterm)
+                PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/$
+HOME/~}\007"'
+                ;;
+        screen)
+                PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/$HO
+ME/~}\033\\"'
+                ;;
+esac
+
+# option
+#setopt autocd
+setopt print_eight_bit
+setopt auto_menu auto_cd correct auto_name_dirs auto_remove_slash
+setopt extended_history hist_ignore_dups hist_ignore_space prompt_subst
+setopt pushd_ignore_dups rm_star_silent sun_keyboard_hack
+setopt extended_glob list_types no_beep always_last_prompt
+setopt cdable_vars sh_word_split auto_param_keys
+# spel check
+setopt correct
+
+setopt list_packed
+
+# history
+HISTFILE=$HOME/.zsh-history
+HISTSIZE=100000
+SAVEHIST=100000
+setopt share_history
+
+# completion
+autoload -U compinit
+compinit
+
+zstyle ':completion:*:default' menu select=1
+zstyle ':completion:*' list-colors $LS_COLORS
+
+zmodload zsh/complist
+
+bindkey -v
+zle-line-init() { zle -K vicmd; } ; zle -N zle-line-init
+bindkey -M menuselect '^J' vi-down-line-or-history
+bindkey -M menuselect '^K' vi-up-line-or-history
+bindkey -M menuselect '^H' vi-backward-char
+bindkey -M menuselect '^L' vi-forward-char
+
+watch="all"
+
+bindkey -a 'q' push-line
+
+# 20090610 for vmware ctrl problem
+# c.f. http://d.hatena.ne.jp/amt/20081103
+#/ShiftAndCtrlStopWorking
+alias reset_xkbd="setxkbmap -rules xorg -model us -layout us"
+
+#if [ "$PS1" ] ; then
+#   mkdir -m 0700 /sys/fs/cgroup/cpu/user/$$
+#   echo $$ > /sys/fs/cgroup/cpu/user/$$/tasks
+#fi
+export BASHISH_DISABLED=1
+
+growl() { echo -e $'\e]9;'${1}'\007' ; return ; }
+
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
+
+# Start tmux
+#tmux
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+if [ -z "$TMUX" -a -z "$STY" ]; then
+    if type tmuxx >/dev/null 2>&1; then
+        tmuxx
+    elif type tmux >/dev/null 2>&1; then
+        if tmux has-session && tmux list-sessions | /usr/bin/grep -qE '.*]$'; then
+            tmux attach && echo "tmux attached session "
+        else
+            tmux new-session && echo "tmux created new session"
+        fi
+    elif type screen >/dev/null 2>&1; then
+        screen -rx || screen -D -RR
+    fi
+fi
