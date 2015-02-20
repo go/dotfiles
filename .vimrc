@@ -1,7 +1,7 @@
+syntax on
+
 filetype plugin on
 filetype indent on
-" colorscheme af
-colorscheme evening
 
 set encoding=utf-8
 set termencoding=utf-8
@@ -22,9 +22,9 @@ set smartindent
 set pastetoggle=<F10>
 set shiftwidth=2
 set tabstop=2
-"set textwidth=72
-set textwidth=0
-"set term=Eterm
+" set textwidth=72
+" set textwidth=0
+" set term=Eterm
 set wildmenu
 set wrapscan
 set showcmd
@@ -34,8 +34,37 @@ set guifont=Ricty_for_Powerline:h10
 set guifontwide=Ricty:h10
 set foldmethod=syntax
 set nobackup
+" set statusline=2
 
-syntax on
+" Auto Save
+autocmd CursorHold * update
+set updatetime=500
+
+" Buffer List
+" map <silent> <C-L> :call BufferList()<cr>
+" REQUIRED. This makes vim invoke latex-suite when you open a tex file.
+" filetype plugin on
+
+" VimFiler
+map <silent> <C-L> :VimFiler -split -simple -winwidth=35 -no-focus -toggle<cr>
+
+" Unite
+map <silent> <S-L> :Unite buffer -vertical -winwidth=35 -no-focus -toggle<cr>
+" nnoremap <silent> <C-L> :Unite buffer -vertical -winwidth=35 -toggle<cr>
+
+
+" Configure NeoBundle
+if &compatible
+  set nocompatible
+endif
+filetype plugin indent off
+
+if has('vim_starting')
+    set runtimepath+=~/.vim/bundle/neobundle.vim
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    NeoBundleFetch 'Shougo/neobundle.vim'
+    call neobundle#end()
+endif 
 
 let g:changelog_timeformat="%Y-%m-%d"
 let g:changelog_username="Go Chiba <go.chiba@gmail.com>"
@@ -45,9 +74,7 @@ let autodate_format="%a %b %d %I:%M %p %Y"
 let autodate_start_line=0
 let format_join_space=3
 let format_allow_over_tw=0
-" start neocomplcache
-let g:neocomplcache_enable_at_startup = 1
-let g:Powerline_symbols = "fancy"
+let g:neocomplete#enable_at_startup = 1
 
 map ex :Explore<CR>
 map <C-n> :cn<CR>
@@ -55,16 +82,6 @@ map <C-p> :cp<CR>
 " map <C-]> :Gtags<CR><CR>
 " map ^? :GtagsCursor<CR>
 " map ^_ :Gtags -r ^R^W<CR>
-
-
-" Auto Save
-autocmd CursorHold * update
-set updatetime=500
-
-" Buffer List
-map <silent> <C-L> :call BufferList()<cr>
-" REQUIRED. This makes vim invoke latex-suite when you open a tex file.
-filetype plugin on
 
 " IMPORTANT: win32 users will need to have 'shellslash' set so that latex
 " can be called correctly.
@@ -92,8 +109,8 @@ au FileType tex :set shiftwidth=2
 au FileType python  :map <buffer> <leader><space> :w!<cr> :! python %<cr>
 au FileType python  :set shiftwidth=2
 au FileType python  :set tabstop=2
-" au FileType python  source /usr/share/vim/vimfiles/ftplugin/python/python.vim
-" au FileType python  :set complete+=k/home/go/work/pydiction-0.5/pydiction iskeyword+=.,(
+"au FileType python  source /usr/share/vim/vimfiles/ftplugin/python/python.vim
+au FileType python  :set complete+=k/home/go/work/pydiction-0.5/pydiction iskeyword+=.,(
 au FileType python  :let g:python_syntax_folding=1
 " au BufNewFile *.py  :set encoding=utf-8
 " au BufNewFile *.py  :set fileencoding=utf-8
@@ -104,7 +121,7 @@ au FileType html :set fileencoding=utf-8
 " C/C++ Environment
 
 " enable Vimshell (developed by Syougo)
-"let g:VimShell_EnableInteractive = 1
+let g:VimShell_EnableInteractive = 1
 
 " js Environment
 au BufNewFile,BufRead  *.js :set syntax=javascript
@@ -123,4 +140,81 @@ let java_allow_cpp_keywords=1
 au FileType coffee :set encoding=utf-8
 au FileType coffee :set fileencoding=utf-8
 
+" Plugins Configuration
 " Bundle 'chase/vim-ansible-yaml'
+
+" NeoBundle 'alpaca-tc/alpaca_powertabline'
+" NeoBundle 'Lokaltog/powerline', { 'rtp' : 'powerline/bindings/vim'}
+" NeoBundle 'Lokaltog/powerline-fontpatcher'
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimproc.vim'
+NeoBundle 'Shougo/vimshell.vim'
+NeoBundle 'Shougo/neocomplete.vim'
+
+let g:lightline = {
+  \ 'colorscheme': 'landscape',
+  \ 'component_function': {
+  \   'fugitive': 'MyFugitive',
+  \   'readonly': 'MyReadonly',
+  \   'modified': 'MyModified'
+  \ },
+  \ 'active': {
+  \   'left': [
+  \     ['mode', 'paste'],
+  \     ['fugitive', 'readonly', 'filename'],
+  \   ],
+  \ },
+  \ 'separator': { 'left': '⮀', 'right': '⮂' },
+  \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+  \ }
+
+function! MyModified()
+  if &filetype == "help"
+    return ""
+  elseif &modified
+    return "+"
+  elseif &modifiable
+    return ""
+  else
+    return ""
+  endif
+endfunction
+
+function! MyReadonly()
+  if &filetype == "help"
+    return ""
+  elseif &readonly
+    return "⭤"
+  else
+    return ""
+  endif
+endfunction
+
+function! MyFilename()
+  return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() : 
+        \  &ft == 'unite' ? unite#get_status_string() : 
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != MyModified() ? ' ' . MyModified() : '')
+endfunction
+
+function! MyFugitive()
+  if exists("*fugitive#head")
+    let _ = fugitive#head()
+    return strlen(_) ? '⭠ '._ : ''
+  endif
+  return ''
+endfunction
+
+set laststatus=2
+let g:Powerline_symbols = 'fancy'
+" let g:Powerline_symbols = 'compatible'
+" set noshowmode
+set t_Co=256
+
+colorscheme evening
+" colorscheme af
+" colorscheme solarized
