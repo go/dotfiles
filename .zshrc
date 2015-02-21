@@ -9,7 +9,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="go"
+ZSH_THEME="cloud"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -62,5 +62,4 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-# For Mac environment
 alias updatedb=/usr/libexec/locate.updatedb
