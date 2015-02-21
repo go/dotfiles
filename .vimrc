@@ -1,8 +1,8 @@
 syntax on
 
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 
+colorscheme elflord
 set encoding=utf-8
 set termencoding=utf-8
 set fileencoding=utf-8
@@ -35,29 +35,18 @@ set guifontwide=Ricty:h10
 set foldmethod=syntax
 set nobackup
 " set statusline=2
+set laststatus=2
+set t_Co=256
 
 " Auto Save
 autocmd CursorHold * update
 set updatetime=500
 
-" Buffer List
-" map <silent> <C-L> :call BufferList()<cr>
-" REQUIRED. This makes vim invoke latex-suite when you open a tex file.
-" filetype plugin on
-
-" VimFiler
-map <silent> <C-L> :VimFiler -split -simple -winwidth=35 -no-focus -toggle<cr>
-
-" Unite
-map <silent> <S-L> :Unite buffer -vertical -winwidth=35 -no-focus -toggle<cr>
-" nnoremap <silent> <C-L> :Unite buffer -vertical -winwidth=35 -toggle<cr>
-
-
 " Configure NeoBundle
 if &compatible
   set nocompatible
 endif
-filetype plugin indent off
+" filetype plugin indent off
 
 if has('vim_starting')
     set runtimepath+=~/.vim/bundle/neobundle.vim
@@ -147,12 +136,16 @@ au FileType coffee :set fileencoding=utf-8
 " NeoBundle 'Lokaltog/powerline', { 'rtp' : 'powerline/bindings/vim'}
 " NeoBundle 'Lokaltog/powerline-fontpatcher'
 NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'bufferlist.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimproc.vim'
 NeoBundle 'Shougo/vimshell.vim'
 NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'davidhalter/jedi-vim'
+NeoBundle 'nathanaelkane/vim-indent-guides'
 
+" Configure lightline
 let g:lightline = {
   \ 'colorscheme': 'landscape',
   \ 'component_function': {
@@ -209,12 +202,40 @@ function! MyFugitive()
   return ''
 endfunction
 
-set laststatus=2
+
+" Configure Buffer List
+" map <silent> <C-L> :call BufferList()<cr>
+" REQUIRED. This makes vim invoke latex-suite when you open a tex file.
+" filetype plugin on
+
+" Configure VimFiler
+map <silent> <C-L> :VimFiler -split -simple -winwidth=35 -no-focus -toggle<cr>
+
+" Configure Unite
+map <silent> <S-L> :Unite buffer -vertical -winwidth=35 -no-focus -toggle<cr>
+" nnoremap <silent> <C-L> :Unite buffer -vertical -winwidth=35 -toggle<cr>
+
+" Configure vim-indent-guides
+let g:indent_guides_auto_colors=0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=111
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=237
+let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_guide_size=1
+
+" Configure jedi-vim
+NeoBundleLazy "davidhalter/jedi-vim", {
+  \ "autoload": {
+  \   "filetypes": ["python", "python3", "djangohtml"],
+  \ },
+  \ "build": {
+  \   "mac": "pip install jedi",
+  \   "unix": "pip install jedi",
+  \ }}
+
+" set laststatus=2
 let g:Powerline_symbols = 'fancy'
 " let g:Powerline_symbols = 'compatible'
 " set noshowmode
-set t_Co=256
+" set t_Co=256
 
-colorscheme evening
-" colorscheme af
-" colorscheme solarized
+" colorscheme elflord
