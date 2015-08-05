@@ -1,12 +1,12 @@
 syntax on
 
-filetype plugin indent on
+" filetype plugin indent on
 
 colorscheme elflord
 set encoding=utf-8
 set termencoding=utf-8
 set fileencoding=utf-8
-set fileencodings=cp932,utf-8,euc-jp
+set fileencodings=utf-8,euc-jp,cp932
 " set tags=./GTAGS,./work/cloudstack/.tags
 " set tags=.tags
 set browsedir=current
@@ -52,6 +52,20 @@ if has('vim_starting')
     set runtimepath+=~/.vim/bundle/neobundle.vim
     call neobundle#begin(expand('~/.vim/bundle/'))
     NeoBundleFetch 'Shougo/neobundle.vim'
+    " NeoBundle 'alpaca-tc/alpaca_powertabline'
+    " NeoBundle 'Lokaltog/powerline', { 'rtp' : 'powerline/bindings/vim'}
+    " NeoBundle 'Lokaltog/powerline-fontpatcher'
+    NeoBundle 'itchyny/lightline.vim'
+    NeoBundle 'bufferlist.vim'
+    NeoBundle 'Shougo/vimfiler.vim'
+    NeoBundle 'Shougo/unite.vim'
+    NeoBundle 'Shougo/vimproc.vim'
+    NeoBundle 'Shougo/vimshell.vim'
+    NeoBundle 'Shougo/neocomplete.vim'
+    " NeoBundle 'davidhalter/jedi-vim'
+    NeoBundle 'nathanaelkane/vim-indent-guides'
+    NeoBundle 'soramugi/auto-ctags.vim'
+    NeoBundle 'koron/nyancat-vim'
     call neobundle#end()
 endif 
 
@@ -65,12 +79,13 @@ let format_join_space=3
 let format_allow_over_tw=0
 let g:neocomplete#enable_at_startup = 1
 
-map ex :Explore<CR>
-map <C-n> :cn<CR>
-map <C-p> :cp<CR>
-" map <C-]> :Gtags<CR><CR>
-" map ^? :GtagsCursor<CR>
-" map ^_ :Gtags -r ^R^W<CR>
+noremap ex :Explore<CR>
+noremap <C-n> :cn<CR>
+noremap <C-p> :cp<CR>
+" noremap <C-]> :Gtags<CR><CR>
+" noremap ^? :GtagsCursor<CR>
+" noremap ^_ :Gtags -r ^R^W<CR>
+" nnoremap <C-[> :pop<CR>
 
 " IMPORTANT: win32 users will need to have 'shellslash' set so that latex
 " can be called correctly.
@@ -89,13 +104,13 @@ let g:Tex_ViewRule_dvi = 'pxdvi'
 
 " Tex Environment
 au BufNewFile		  *.tex :TTemplate
-au FileType tex :map <leader>ll :! platex %<cr>
-au FileType tex :map <leader>lp :! dvips %:r.dvi<cr> :! lpr %:r.ps<cr> 
+au FileType tex :noremap <leader>ll :! platex %<cr>
+au FileType tex :noremap <leader>lp :! dvips %:r.dvi<cr> :! lpr %:r.ps<cr> 
 au FileType tex :set tabstop=2
 au FileType tex :set shiftwidth=2
 
 " Python Environment
-au FileType python  :map <buffer> <leader><space> :w!<cr> :! python %<cr>
+au FileType python  :noremap <buffer> <leader><space> :w!<cr> :! python %<cr>
 au FileType python  :set shiftwidth=2
 au FileType python  :set tabstop=2
 "au FileType python  source /usr/share/vim/vimfiles/ftplugin/python/python.vim
@@ -132,18 +147,6 @@ au FileType coffee :set fileencoding=utf-8
 " Plugins Configuration
 " Bundle 'chase/vim-ansible-yaml'
 
-" NeoBundle 'alpaca-tc/alpaca_powertabline'
-" NeoBundle 'Lokaltog/powerline', { 'rtp' : 'powerline/bindings/vim'}
-" NeoBundle 'Lokaltog/powerline-fontpatcher'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'bufferlist.vim'
-NeoBundle 'Shougo/vimfiler.vim'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimproc.vim'
-NeoBundle 'Shougo/vimshell.vim'
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'davidhalter/jedi-vim'
-NeoBundle 'nathanaelkane/vim-indent-guides'
 
 " Configure lightline
 let g:lightline = {
@@ -202,20 +205,20 @@ function! MyFugitive()
   return ''
 endfunction
 
-
 " Configure Buffer List
-" map <silent> <C-L> :call BufferList()<cr>
+" noremap <silent> <C-L> :call BufferList()<cr>
 " REQUIRED. This makes vim invoke latex-suite when you open a tex file.
 " filetype plugin on
 
 " Configure VimFiler
-map <silent> <C-L> :VimFiler -split -simple -winwidth=35 -no-focus -toggle<cr>
+noremap <silent> <C-L> :VimFiler -split -simple -winwidth=35 -no-focus -toggle<cr>
 
 " Configure Unite
-map <silent> <S-L> :Unite buffer -vertical -winwidth=35 -no-focus -toggle<cr>
-" nnoremap <silent> <C-L> :Unite buffer -vertical -winwidth=35 -toggle<cr>
+noremap <silent> <S-L> :Unite buffer -vertical -winwidth=35 -no-focus -toggle<cr>
+" noremap <silent> <C-L> :Unite buffer -vertical -winwidth=35 -toggle<cr>
 
 " Configure vim-indent-guides
+map gi :IndentGuidesToggle<cr>
 let g:indent_guides_auto_colors=0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=111
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=237
@@ -232,6 +235,11 @@ NeoBundleLazy "davidhalter/jedi-vim", {
   \   "unix": "pip install jedi",
   \ }}
 
+" Configure auto-ctags
+let g:auto_ctags = 1
+let g:auto_ctags_directory_list = ['.git', '.svn']
+set tags+=.git/tags
+
 " set laststatus=2
 let g:Powerline_symbols = 'fancy'
 " let g:Powerline_symbols = 'compatible'
@@ -239,3 +247,4 @@ let g:Powerline_symbols = 'fancy'
 " set t_Co=256
 
 " colorscheme elflord
+filetype plugin indent on
