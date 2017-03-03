@@ -30,7 +30,8 @@ export HOSTNAME
 case ${OSTYPE} in
   darwin*)
     EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
-    alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+    #alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+    alias vi='env LANG=ja_JP.UTF-8 /usr/local/bin/vim "$@"'
     ;;
   linux*)
     EDITOR=/usr/bin/vim
@@ -44,19 +45,28 @@ export EDITOR
 TERM=xterm-256color
 export TERM
 
+### UIM for Xquartz Configuration ###
+export LANG=ja_JP.UTF-8
+export XMODIFIERS=@im=uim
+export GTK_IM_MODULE=uim
+
 ### PATH Configuration ###
 PATH=.\
 :$HOME/work/twittext\
 :/usr/games/bin\
+:/usr/local/bin\
 :/usr/bin\
 :/usr/sbin\
-:/usr/local/bin\
 :/bin\
 :/sbin\
 :/usr/local/bin\
+:/opt/ImageMagick/bin\
 :$HOME/work/gsutil\
 :$PATH
 export PATH
+
+### Infinit Tool ###
+PATH=$HOME/Downloads/Infinit-x86_64-osx-clang3-0.4.0/bin:$PATH
 
 ### CloudStack API tool ###
 PATH=$HOME/work/cloudstack_api:$PATH
@@ -79,17 +89,15 @@ MANPATH=/usr/share/man\
 export MANPATH
 
 ### PYTHONPATH Configuration ###
-PYTHONPATH=$HOME/work\
-:$HOME/work/google_appengine\
-:$HOME/work/google_appengine/lib/antlr3\
-:$HOME/work/google_appengine/lib/django\
-:$HOME/work/google_appengine/lib/webob\
-:$HOME/work/google_appengine/lib/yaml/lib\
-:$PYTHONPATH
-export PYTHONPATH
+
+### Pyenv Configuration ###
+eval "$(pyenv init -)"
+
+### Alias ctags ###
+alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 
 ### Golang Configuration ###
-GOROOT=/home/go/work/goroot
+#GOROOT=/usr/local/go
 case ${OSTYPE} in
   darwin*)
     GOOS=darwin
@@ -98,21 +106,28 @@ case ${OSTYPE} in
     GOOS=linux
     ;;
 esac
-GOARCH=386
-export GOROOT GOOS GOARCH
+GOARCH=amd64
+GOPATH=$HOME/go
+#export GOROOT GOOS GOARCH GOPATH
+export GOOS GOARCH GOPATH
+export PATH=$PATH\
+:/usr/local/go/bin\
+:$GOPATH/bin
 
 ### CloudStack Dev Configuration ###
 CATALINA_HOME=$HOME/work/apache-tomcat-6.0.33
 export CATALINA_HOME
 CATALINA_BASE=$HOME/work/apache-tomcat-6.0.33
 export CATALINA_BASE
-JAVA_HOME=/Library/Java/Home
+
+#JAVA_HOME=/Library/Java/Home
+JAVA_HOME=`/usr/libexec/java_home -v 1.7`
 export JAVA_HOME
 # JAVA_OPTS="-Xms256m -Xmx512m"
 # export JAVA_OPTS
 _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
 export _JAVA_OPTIONS
-# CLASSPATH=/Users/go/work/apache-tomcat-6.0.33/bin/bootstrap.jar:/Users/go/work/apache-tomcat-6.0.33/lib
+# CLASSPATH=$HOME/work/apache-tomcat-6.0.33/bin/bootstrap.jar:$HOME/work/apache-tomcat-6.0.33/lib
 CLASSPATH=/usr/local/Cellar/tomcat6/6.0.33/libexec/bin/bootstrap.jar
 export CLASSPATH
 M2_HOME=/usr/share/java/maven-3.0.3
@@ -124,20 +139,9 @@ export MAVEN_OPTS
 #SVN_SSH="ssh -l gchiba -i ~/.ssh/id_rsa" 
 #export SVN_SSH
 
-### Change the window title of X terminals ###
-# case $TERM in
-#      xterm*|rxvt|Eterm|eterm)
-#                 PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/$ HOME/~}\007"'
-#                 ;;
-#         screen)
-#                 PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\033\\"'
-#                 ;;
-# esac
-
 ### zsh Option ###
-#setopt autocd
 setopt print_eight_bit
-setopt auto_menu auto_cd correct auto_name_dirs auto_remove_slash
+setopt auto_list auto_menu auto_cd correct auto_name_dirs auto_remove_slash
 setopt extended_history hist_ignore_dups hist_ignore_space prompt_subst
 setopt pushd_ignore_dups rm_star_silent sun_keyboard_hack
 setopt extended_glob list_types no_beep always_last_prompt
@@ -155,9 +159,14 @@ setopt share_history
 
 ### Completion ###
 autoload -U compinit
-compinit
+compinit -C
 zstyle ':completion:*:default' menu select=1
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' list-colors $LS_COLORS
+if [ -e /usr/local/share/zsh-completions ]; then
+  fpath=(/usr/local/share/zsh-completions $fpath)
+fi
 
 zmodload zsh/complist
 
@@ -189,11 +198,9 @@ growl() { echo -e $'\e]9;'${1}'\007' ; return ; }
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-### Start tmux ###
-#tmux
-
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
+### Start tmux ###
 if [ -z "$TMUX" -a -z "$STY" ]; then
     if type tmuxx >/dev/null 2>&1; then
         tmuxx
@@ -207,3 +214,12 @@ if [ -z "$TMUX" -a -z "$STY" ]; then
         screen -rx || screen -D -RR
     fi
 fi
+
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+
+### IaaS Configuration ###
+## AWS ##
+source /usr/local/bin/aws_zsh_completer.sh
+
+## Azure ##
+. <(azure --completion)

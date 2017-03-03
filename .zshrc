@@ -9,14 +9,14 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="cloud"
+ZSH_THEME="go"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment this to disable bi-weekly auto-update checks
 # DISABLE_AUTO_UPDATE="true"
@@ -44,7 +44,7 @@ ZSH_THEME="cloud"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git osx brew python java emoji-clock mvn tmux vagrant)
+plugins=(brew brew-cask docker docker-compose emoji emoji-clock git golang heroku java mvn npm osx python terraform tig tmux vagrant vundle)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -63,3 +63,5 @@ export XML_CATALOG_FILES="/usr/local/etc/xml/catalog"
 export PATH="/usr/local/heroku/bin:$PATH"
 
 alias updatedb=/usr/libexec/locate.updatedb
+
+source ~/.zshrc.post-oh-my-zsh
