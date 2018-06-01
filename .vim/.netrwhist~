@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/Users/go/work/nova/nova/virt/vmwareapi'
-let g:netrw_dirhist_2='/Users/go/work/cloudstack-gui/translations/CloudStack_UI.43xmessagesproperties'
-let g:netrw_dirhist_3='/Users/go/work/cloudstack-docs-admin/locale/ja'
-let g:netrw_dirhist_4='/Users/go/work/cloudstack-docs-admin/build/html'
-let g:netrw_dirhist_5='/Users/go/work/sphinx-test/build/html'
-let g:netrw_dirhist_6='/Users/go/work/cloudstack-docs-rn/build/html'
-let g:netrw_dirhist_7='/Users/go/work/cloudstack-trans/.tx'
