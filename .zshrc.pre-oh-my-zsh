@@ -29,7 +29,8 @@ export HOSTNAME
 ### Vim Path Configuration ###
 case ${OSTYPE} in
   darwin*)
-    EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
+    #EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
+    EDITOR=/usr/local/bin/vim
     #alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
     alias vi='env LANG=ja_JP.UTF-8 /usr/local/bin/vim "$@"'
     ;;
@@ -39,6 +40,9 @@ case ${OSTYPE} in
     ;;
 esac
 export EDITOR
+
+### Change diff
+alias diff="git diff"
 
 ### Terminal Configuration ###
 #TERM=vt100
@@ -52,6 +56,8 @@ export GTK_IM_MODULE=uim
 
 ### PATH Configuration ###
 PATH=.\
+:/usr/local/opt/icu4c/bin\
+:/usr/local/opt/icu4c/sbin\
 :$HOME/work/twittext\
 :/usr/games/bin\
 :/usr/local/bin\
@@ -62,6 +68,8 @@ PATH=.\
 :/usr/local/bin\
 :/opt/ImageMagick/bin\
 :$HOME/work/gsutil\
+:/usr/local/opt/node@8/bin\
+:/Library/Ballerina/ballerina-0.970.0/bin\
 :$PATH
 export PATH
 
@@ -79,7 +87,7 @@ MANPATH=/usr/share/man\
 :/opt/SUNWspro/man\
 :/usr/local/man\
 :/usr/local2/man\
-:/usr/local2/java1.2/man\
+#:/usr/local2/java1.2/man\
 :/usr/local2/TeX/man\
 :/usr/local2/canna/man\
 :/usr/local2/lib/perl5/man\
@@ -98,15 +106,15 @@ alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 
 ### Golang Configuration ###
 #GOROOT=/usr/local/go
-case ${OSTYPE} in
-  darwin*)
-    GOOS=darwin
-    ;;
-  linux*)
-    GOOS=linux
-    ;;
-esac
-GOARCH=amd64
+#case ${OSTYPE} in
+#  darwin*)
+#    GOOS=darwin
+#    ;;
+#  linux*)
+#    GOOS=linux
+#    ;;
+#esac
+#GOARCH=amd64
 GOPATH=$HOME/go
 #export GOROOT GOOS GOARCH GOPATH
 export GOOS GOARCH GOPATH
@@ -121,12 +129,12 @@ CATALINA_BASE=$HOME/work/apache-tomcat-6.0.33
 export CATALINA_BASE
 
 #JAVA_HOME=/Library/Java/Home
-JAVA_HOME=`/usr/libexec/java_home -v 1.7`
-export JAVA_HOME
+#JAVA_HOME=`/usr/libexec/java_home -v 1.7`
+#export JAVA_HOME
 # JAVA_OPTS="-Xms256m -Xmx512m"
 # export JAVA_OPTS
-_JAVA_OPTIONS="-Dfile.encoding=UTF-8"
-export _JAVA_OPTIONS
+#_JAVA_OPTIONS="-Dfile.encoding=UTF-8"
+#export _JAVA_OPTIONS
 # CLASSPATH=$HOME/work/apache-tomcat-6.0.33/bin/bootstrap.jar:$HOME/work/apache-tomcat-6.0.33/lib
 CLASSPATH=/usr/local/Cellar/tomcat6/6.0.33/libexec/bin/bootstrap.jar
 export CLASSPATH
@@ -202,9 +210,7 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 ### Start tmux ###
 if [ -z "$TMUX" -a -z "$STY" ]; then
-    if type tmuxx >/dev/null 2>&1; then
-        tmuxx
-    elif type tmux >/dev/null 2>&1; then
+    if type tmux >/dev/null 2>&1; then
         if tmux has-session && tmux list-sessions | /usr/bin/grep -qE '.*]$'; then
             tmux -2 attach && echo "tmux attached session "
         else
@@ -222,4 +228,5 @@ test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_in
 source /usr/local/bin/aws_zsh_completer.sh
 
 ## Azure ##
-. <(azure --completion)
+autoload -U bashcompinit && bashcompinit
+source /usr/local/Cellar/azure-cli/2.0.19/libexec/bin/az.completion.sh
